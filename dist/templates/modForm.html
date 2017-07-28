@@ -1,0 +1,14 @@
+<div class="FormContainer" ng-if="controller.visible">
+    <div ng-if="!controller.panel">
+        <div ng-include="templateContentUrl" ng-if="templateContentUrl"></div>
+    </div>
+    
+    <div class="card" ng-if="controller.panel">
+        <h3 class="card-header primary-color white-text">{{controller.title|translate}}</h3>
+        <div class="card-block">
+            <div class="panelContent">
+                <div ng-include="templateContentUrl" ng-if="templateContentUrl"></div>
+            </div>
+        </div>
+    </div>
+</div>

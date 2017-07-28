@@ -1,0 +1,49 @@
+<div ng-if="controller.visible">
+    <div ng-if="context.studies.data">
+        <mdb-external-selector 
+            model="model"
+            field="controller.field"
+            label="controller.label|translate"
+            label-field="controller.labelField"
+            on-click="$open()"
+        ></mdb-external-selector>
+
+        <mdb-modal show="showModal" title="'SELECT_STUDY'|translate"
+                on-accept="$select()"
+                context='context'
+                enable-accept="context.selected"
+                >
+            <div>
+                <mdb-select label="'CAMPUS'|translate"
+                           model="context" field="'campus'"
+                           required="true"
+                           list="context.campusList"
+                           label-field="'label'"
+                           on-change="context.area=undefined; context.selected=undefined"
+                           ></mdb-select>
+                
+                <mdb-select 
+                             ng-if='context.campus'
+                            label="'AREA'|translate"
+                           model="context" field="'area'"
+                           required="true"
+                           list="context.campus.areaList"
+                           label-field="'label'"
+                          on-change="context.selected=undefined"
+                           ></mdb-select>
+                
+                <mdb-select
+                            ng-if='context.area'
+                            label="'STUDY'|translate" 
+                           model="context" field="'selected'" 
+                           required="true"
+                           list="context.area.studyList" 
+                           label-field="context.controller.labelField"
+                           ></mdb-select>
+            </div>
+        </mdb-modal>
+    </div>
+    <div ng-if="!context.studies.data">
+        Loading studies
+    </div>
+</div>

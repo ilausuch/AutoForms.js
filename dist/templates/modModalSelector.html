@@ -1,0 +1,22 @@
+<mdb-external-selector 
+            model="model"
+            field="controller.field"
+            label="controller.label|translate"
+            label-field="controller.labelField"
+            on-click="$open()"
+        ></mdb-external-selector>
+
+        <mdb-modal 
+                show="controller.modalVisible" 
+                title="controller.title|translate"
+                on-accept="$onAccept()"
+                context='controller'
+                enable-accept="controller.canAccept"
+                >
+            <div>
+                <div ng-repeat="entryController in controller.content" class="groupContent">
+                    <div ng-include="templateContentUrl" ng-if="templateContentUrl"></div>
+                </div>
+            </div>
+        </mdb-modal>
+</mdb-external-selector>

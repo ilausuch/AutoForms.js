@@ -1,0 +1,47 @@
+
+<mod-group
+    ng-if="entryController.$type==='group'"
+    model="model" 
+    controller="entryController"></mod-group>
+
+<mod-form
+    ng-if="entryController.$type==='form'"
+    model="model" 
+    controller="entryController"></mod-form>
+
+<mod-button
+    ng-if="entryController.$type==='button'"
+    model="model"
+    controller="entryController"></mod-button>
+
+<mod-message
+    ng-if="entryController.$type==='message'"
+    model="model"
+    controller="entryController"></mod-message>
+
+<mod-field 
+    ng-if="entryController.$type==='field'"
+    model="model" 
+    controller="entryController" ></mod-field>
+
+<mod-modal
+    ng-if="entryController.$type==='modal'"
+    model="model"
+    controller="entryController"
+    ></mod-modal>
+
+<mod-modal-selector
+    ng-if="entryController.$type==='modalSelector'"
+    model="model"
+    controller="entryController"
+    ></mod-modal-selector>
+
+<!--
+{{entryController.$type}}
+-->
+<!--
+<mod-studies
+    ng-if="entryController.$type==='studies'"
+    model="model"
+    controller="entryController"></mod-studies>
+-->

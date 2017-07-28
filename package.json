@@ -1,0 +1,22 @@
+{
+  "name": "AutoForm.js",
+  "version": "1.0.0",
+  "keywords": [
+    "util",
+    "functional",
+    "server",
+    "client",
+    "browser"
+  ],
+  "author": "ilausuch",
+  "contributors": [],
+  "dependencies": {},
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-concat": "^2.6.1",
+    "gulp-header-footer": "0.0.3",
+    "gulp-minify": "^1.0.0",
+    "gulp-sequence": "^0.4.6",
+    "gulp-strip-comments": "^2.5.1"
+  }
+}

@@ -1,0 +1,5 @@
+<div ng-repeat="fieldConf in controller.fields" class="FormContent">
+    <mod-field model="model" controller="fieldConf"
+               on-change="$onChange(model,field)"
+               ></mod-field>
+</div>

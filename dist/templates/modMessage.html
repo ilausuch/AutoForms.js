@@ -1,0 +1,9 @@
+<div ng-if="controller.visible">
+    <div 
+        ng-if="getData().data"
+        ng-repeat="message in getData().data"
+        class="alert alert-{{controller.mode}}" 
+        role="alert">{{message.text|translate}}</div>
+    
+    <p ng-if="!getData().data"><i class="fa fa-spinner fa-pulse fa-fw" ></i> Loading messages...</p>    
+</div>

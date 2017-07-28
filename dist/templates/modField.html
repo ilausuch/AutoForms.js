@@ -1,0 +1,49 @@
+<div ng-if="controller.visible">
+    <mdb-input 
+            label="controller.label|translate" model="model" field="controller.field" 
+            ng-if="controller.type==='input'"
+            on-change="$onChange()"
+            required="controller.required"
+            validator="controller.verify"
+            ></mdb-input>
+
+    <mdb-textarea 
+            label="controller.label|translate" model="model" field="controller.field" 
+            ng-if="controller.type==='text'"
+            on-change="$onChange()"
+            required="controller.required"
+            validator="controller.verify"
+            ></mdb-textarea>
+
+    <mdb-combo 
+            label="controller.label|translate" model="model" field="controller.field" 
+            ng-if="controller.type==='list'"
+            list="getData().data" label-field="controller.labelField" value-field="controller.valueField"
+            on-change="$onChange()"
+            required="controller.required"
+            ></mdb-combo>
+
+    <mdb-select 
+            label="controller.label|translate" model="model" field="controller.field" 
+            ng-if="controller.type==='select'"
+            list="getData().data" label-field="controller.labelField"
+            on-change="$onChange()"
+            required="controller.required"
+            ></mdb-select>
+
+    <div ng-if="controller.type==='radio'" style="margin-bottom: 2em">
+        <p>{{controller.label|translate}} <span ng-if="controller.required" style="color:red">*</span></p>
+        <mdb-radio-group 
+            model="model" field="controller.field" 
+            list="getData().data" label-field="controller.labelField" value-field="controller.valueField"
+            on-change="$onChange()"
+            required="controller.required"
+            ></mdb-radio-group>
+    </div>
+
+    <mdb-checkbox label="controller.label|translate" model="model" field="controller.field" 
+                  ng-if="controller.type==='bool'"
+                  on-change="$onChange()"
+                  required="controller.required"
+                  ></mdb-checkbox>
+</div>
