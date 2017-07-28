@@ -55,9 +55,14 @@ class AutoFormContext{
         this.state={};
         this.scope[this.stateName]=this.state;
         this.stateNotifier=new StateNotifier(this);
+        this.setstate=function(controllerId,stateId,value){
+            this.entityRegistry.get(controllerId).setState(stateId,value);
+
+                    }
 
         this.data={};
-    }
+
+            }
 };
 
 
@@ -85,8 +90,10 @@ class Entity{
             this.setup(config.context);
     }
 
-        setup(context){
-        if (this.$configured)
+        setup(context,parentController){
+        this.$parent=parentController;
+
+                if (this.$configured)
             return;
 
                 this.$configured=true;
@@ -194,6 +201,10 @@ class Entity{
             this.context.callAfter(function(){
                 this.onEvent({controller:this,data:data});
             });
+    }
+
+        isVisible(){
+        return this.visible && (this.$parent===undefined || this.$parent.isVisible());
     }
 
 
@@ -331,12 +342,7 @@ class State{
             throw new AutoFormException("Structure configuration error: state must have an initValue",{
                 theConfig:config});
 
-                if (config.updater===undefined)
-            throw new AutoFormException("Structure configuration error: state must define the updater function",{
-                theConfig:config});
-
-
-                        this.id=config.id;
+                this.id=config.id;
         this.initialValue=config.initValue;
         this.updater=config.updater;
 
@@ -353,7 +359,9 @@ class State{
     }
 
         update(controller,model){
-        this.set(this.updater(controller,model));
+        try{
+            this.set(this.updater(controller,model));
+        }catch(e){}
     }
 }
 
@@ -422,9 +430,12 @@ class EntityWithState extends Entity{
         this.stateAssoc[state.id]=state;
     }
 
-        updateState(model){
-        if (model===undefined)
-            model=this.context.model;
+        setState(stateId,value){
+        this.stateAssoc[stateId].set(value);
+    }
+
+        updateState(){
+        var model=this.context.model;
 
                 this.stateList.forEach(function(state){
             state.update(this,model);
@@ -511,9 +522,8 @@ class StateNotifier extends Notifier{
                 var $notifier=this;
 
                 context.watch(context.stateName,function(newState,oldState){
-                $notifier.notify({state:context.scope.state, newState:newState, oldState:oldState});
-
-                    });
+            $notifier.notify({state:context.scope.state, newState:newState, oldState:oldState});
+        });
     }
 }
 
@@ -527,13 +537,12 @@ class Container extends EntityWithState{
         super(config,type);
     }
 
-        setup(context){
-        super.setup(context);
+        setup(context,parentController){
+        super.setup(context,parentController);
 
                 this.checkRequired("content");
 
-
-                        var $this=this;
+                var $this=this;
 
                 this.addState({
             id:"verified",
@@ -555,14 +564,19 @@ class Container extends EntityWithState{
         verifiedUpdater(model){
         var result=true;
 
+                if (!this.isVisible())
+            return true;
+
                 this.content.forEach(function(subController){
             try{
-                result = result & subController.getStateValue("verified");
+                result = result && subController.getStateValue("verified");
             }catch(e){
             }
         });
 
-                return result;
+
+
+                                return result;
     }
 
     }
@@ -582,8 +596,9 @@ class Button extends EntityWithState{
 
             }
 
-        onClick(model){
-        this.onClick(this,model);
+        $onClick(){
+        var controller=this;
+        this.onClick({controller:controller, context:controller.context, model:controller.context.model});
     }
 }
 
@@ -618,15 +633,19 @@ class Field extends EntityWithState{
 
                 this.addState({
             id:"verified",
-            initValue:false,
+            initValue:this.verifiedUpdater(),
             updater:function(controller,model){
-                return controller.verifiedUpdater(model);
+                return controller.verifiedUpdater();
             }
         });
     }
 
-        verifiedUpdater(model){
+        verifiedUpdater(){
         var result=true;
+        var model=this.context.model;
+
+                if (!this.isVisible())
+            return true;
 
                 if (model[this.field]===undefined || model[this.field]===""){
             if (this.required)
@@ -697,6 +716,21 @@ class Group extends Container{
 
             }
 }
+
+
+class Link extends Entity{
+    constructor(config){
+        super(config,"link");
+
+                this.checkRequired("link");
+        this.checkRequired("label");
+    }
+
+        setup(context){
+        super.setup(context);
+    }
+}
+
 
 
 class Message extends EntityWithState{

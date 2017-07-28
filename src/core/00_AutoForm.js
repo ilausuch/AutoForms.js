@@ -58,9 +58,14 @@ class AutoFormContext{
         this.state={};
         this.scope[this.stateName]=this.state;
         this.stateNotifier=new StateNotifier(this);
+        this.setstate=function(controllerId,stateId,value){
+            this.entityRegistry.get(controllerId).setState(stateId,value);
+            
+        }
         
         //Static data
         this.data={};
+        
     }
 };
 

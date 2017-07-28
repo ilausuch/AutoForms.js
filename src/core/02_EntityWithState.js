@@ -34,9 +34,12 @@ class EntityWithState extends Entity{
         this.stateAssoc[state.id]=state;
     }
     
-    updateState(model){
-        if (model===undefined)
-            model=this.context.model;
+    setState(stateId,value){
+        this.stateAssoc[stateId].set(value);
+    }
+    
+    updateState(){
+        var model=this.context.model;
         
         this.stateList.forEach(function(state){
             state.update(this,model);

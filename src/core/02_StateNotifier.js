@@ -11,10 +11,7 @@ class StateNotifier extends Notifier{
         
         context.watch(context.stateName,function(newState,oldState){
             //console.log("*** updated state",newState);
-            //context.callLater(function(){
-                $notifier.notify({state:context.scope.state, newState:newState, oldState:oldState});
-            //});
-            
+            $notifier.notify({state:context.scope.state, newState:newState, oldState:oldState});
         });
     }
 }

@@ -9,11 +9,10 @@ class Container extends EntityWithState{
         super(config,type);
     }
     
-    setup(context){
-        super.setup(context);
+    setup(context,parentController){
+        super.setup(context,parentController);
         
         this.checkRequired("content");
-        
         
         var $this=this;
         
@@ -38,13 +37,18 @@ class Container extends EntityWithState{
     verifiedUpdater(model){
         var result=true;
         
+        if (!this.isVisible())
+            return true;
+        
         this.content.forEach(function(subController){
             try{
-                result = result & subController.getStateValue("verified");
+                result = result && subController.getStateValue("verified");
             }catch(e){
                 //DO Nothing
             }
         });
+        
+        
         
         return result;
     }

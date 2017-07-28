@@ -33,15 +33,19 @@ class Field extends EntityWithState{
         
         this.addState({
             id:"verified",
-            initValue:false,
+            initValue:this.verifiedUpdater(),
             updater:function(controller,model){
-                return controller.verifiedUpdater(model);
+                return controller.verifiedUpdater();
             }
         });
     }
     
-    verifiedUpdater(model){
+    verifiedUpdater(){
         var result=true;
+        var model=this.context.model;
+        
+        if (!this.isVisible())
+            return true;
         
         if (model[this.field]===undefined || model[this.field]===""){
             if (this.required)

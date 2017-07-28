@@ -17,7 +17,8 @@ class Button extends EntityWithState{
         
     }
     
-    onClick(model){
-        this.onClick(this,model);
+    $onClick(){
+        var controller=this;
+        this.onClick({controller:controller, context:controller.context, model:controller.context.model});
     }
 }

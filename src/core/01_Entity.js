@@ -14,7 +14,9 @@ class Entity{
             this.setup(config.context);
     }
     
-    setup(context){
+    setup(context,parentController){
+        this.$parent=parentController;
+        
         if (this.$configured)
             return;
         
@@ -128,6 +130,10 @@ class Entity{
             this.context.callAfter(function(){
                 this.onEvent({controller:this,data:data});
             });
+    }
+    
+    isVisible(){
+        return this.visible && (this.$parent===undefined || this.$parent.isVisible());
     }
     
     

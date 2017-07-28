@@ -15,11 +15,11 @@ class State{
         if (config.initValue===undefined)
             throw new AutoFormException("Structure configuration error: state must have an initValue",{
                 theConfig:config});
-        
+        /*
         if (config.updater===undefined)
             throw new AutoFormException("Structure configuration error: state must define the updater function",{
                 theConfig:config});
-        
+        */
         
         this.id=config.id;
         this.initialValue=config.initValue;
@@ -38,6 +38,8 @@ class State{
     }
     
     update(controller,model){
-        this.set(this.updater(controller,model));
+        try{
+            this.set(this.updater(controller,model));
+        }catch(e){}
     }
 }
