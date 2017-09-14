@@ -49,6 +49,7 @@ class AutoFormContext{
         this.modelName=this.id+"_model";
         this.scope[this.modelName]=config.model;
         this.model=config.model;
+        this.model.__status={};
         this.modelNotifier=new ModelNotifier(this);
 
         this.stateName=this.id+"_state";
@@ -625,6 +626,32 @@ class Field extends EntityWithState{
                 this.checkRequired("provider");
                 this.checkRequired("labelField");
                 break;
+            case "date":
+                this.dateConfig={};
+                var $this=this;
+
+                                if (config.availableDates!==undefined){
+                    if (config.availableDates instanceof ProviderFromStaticData){
+                        $this.availableDates=[true];
+
+                                                config.availableDates.getPromise().data.forEach(function(item){
+                            $this.availableDates.push(item);
+                        });
+                    } else if (config.availableDates instanceof Provider){
+                        config.availableDates.getPromise().then(function(data){
+                            $this.context.callLater(function(){
+                                $this.availableDates=[true];
+                                data.forEach(function(d){
+                                    $this.availableDates.push(d);
+                                });
+                            });
+                        });
+                    }
+
+                                    }else
+                    throw new AutoFormException("availableDates must be a provider",config);
+
+                                break;
         }
     }
 
@@ -638,6 +665,14 @@ class Field extends EntityWithState{
                 return controller.verifiedUpdater();
             }
         });
+
+
+
+                                switch(this.type){
+            case "date":
+
+                                break;
+        }
     }
 
         verifiedUpdater(){
@@ -657,6 +692,50 @@ class Field extends EntityWithState{
             }
 
                 return result;
+    }
+
+
+        }
+
+
+
+
+
+class FileSelector extends EntityWithState{
+    constructor(config){
+        super(config,"file");
+
+                this.checkRequired("label");
+        this.checkRequired("field");
+        this.checkConfigDefaultValue("required",true);
+
+                this.checkConfigDefaultValue("buttonLabel","UPLOAD_BUTTON_LABEL");
+        this.checkConfigDefaultValue("placeholderLabel","UPLOAD_PLACEHOLDER_LABEL");
+        this.checkConfigDefaultValue("uploadFileLinksDesp","12em");
+
+                if (config.uploadUrl===undefined && config.uploadFunction===undefined)
+            throw "FileSelector needs a uploadUrl or uploadFunction";
+
+                this.checkConfigDefaultValue("uploadUrl",undefined);
+        this.checkConfigDefaultValue("uploadResultParse",undefined);
+        this.checkConfigDefaultValue("uploadFunction",undefined);
+    }
+
+        setup(context){
+        super.setup(context);
+
+                this.addState({
+            id:"verified",
+            initValue:this.verifiedUpdater(),
+            updater:function(controller,model){
+                return controller.verifiedUpdater();
+            }
+        });
+    }
+
+        verifiedUpdater(){
+
+                return true;
     }
 
 

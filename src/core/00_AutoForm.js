@@ -51,6 +51,7 @@ class AutoFormContext{
         this.modelName=this.id+"_model";
         this.scope[this.modelName]=config.model;
         this.model=config.model;
+        this.model.__status={};
         this.modelNotifier=new ModelNotifier(this);
         
         //State

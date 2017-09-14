@@ -25,6 +25,32 @@ class Field extends EntityWithState{
                 this.checkRequired("provider");
                 this.checkRequired("labelField");
                 break;
+            case "date":
+                this.dateConfig={};
+                var $this=this;
+                
+                if (config.availableDates!==undefined){
+                    if (config.availableDates instanceof ProviderFromStaticData){
+                        $this.availableDates=[true];
+                        
+                        config.availableDates.getPromise().data.forEach(function(item){
+                            $this.availableDates.push(item);
+                        });
+                    } else if (config.availableDates instanceof Provider){
+                        config.availableDates.getPromise().then(function(data){
+                            $this.context.callLater(function(){
+                                $this.availableDates=[true];
+                                data.forEach(function(d){
+                                    $this.availableDates.push(d);
+                                });
+                            });
+                        });
+                    }
+                    
+                }else
+                    throw new AutoFormException("availableDates must be a provider",config);
+                
+                break;
         }
     }
     
@@ -38,6 +64,14 @@ class Field extends EntityWithState{
                 return controller.verifiedUpdater();
             }
         });
+        
+        
+        
+        switch(this.type){
+            case "date":
+                
+                break;
+        }
     }
     
     verifiedUpdater(){
